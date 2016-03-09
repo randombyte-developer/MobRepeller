@@ -7,7 +7,7 @@ import org.spongepowered.api.world.World
 
 object CrossShapeChecker {
 
-    private val directions = listOf(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST)
+    val directions = listOf(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST)
     //BlockTypes mapped to the value they increase the radius by
     private val blockTypes = mapOf(IRON_BLOCK to 2, LAPIS_BLOCK to 2, GOLD_BLOCK to 4, DIAMOND_BLOCK to 6)
 

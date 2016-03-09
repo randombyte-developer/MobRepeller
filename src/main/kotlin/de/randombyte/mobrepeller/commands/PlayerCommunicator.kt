@@ -15,4 +15,9 @@ object PlayerCommunicator {
         sendMessage(Text.of(TextColors.GREEN, message))
         return CommandResult.success()
     }
+
+    fun CommandSource.warn(message: String): CommandResult {
+        sendMessage(Text.of(TextColors.YELLOW, message))
+        return CommandResult.success()
+    }
 }

@@ -25,7 +25,7 @@ class RegisterRepeller : CommandExecutor {
         //Ignore repeller with 0 radius
         if (repellerRadius == 0) return src.fail("Not standing on a repeller!")
         MobRepeller.repellers[groundBlock] = repellerRadius
-        src.success("Added cross with value $repellerRadius at ${groundBlock.position}")
+        src.success("Added cross with value $repellerRadius at ${groundBlock.position.toInt()}")
 
         return CommandResult.success()
     }

@@ -22,7 +22,7 @@ class ListRepellers : CommandExecutor {
         val repellerTexts = MobRepeller.repellers.map { repeller ->
             Text.of("${repeller.key.position.toString()} with radius ${repeller.value}",
                     TextActions.executeCallback { src ->
-                        src.sendMessage(Text.of("Click on repeller at ${repeller.key.position.toString()}"))
+                        src.sendMessage(Text.of("Click on repeller at ${repeller.key.position.toInt()}"))
                     })
         }
 

@@ -1,8 +1,10 @@
 package de.randombyte.mobrepeller.commands
 
-import de.randombyte.mobrepeller.CrossShapeChecker
-import de.randombyte.mobrepeller.MobRepeller
+import de.randombyte.mobrepeller.State
+import de.randombyte.mobrepeller.State.toInt
+import de.randombyte.mobrepeller.State.RepellerRegistrationResult.*
 import de.randombyte.mobrepeller.commands.PlayerCommunicator.fail
+import de.randombyte.mobrepeller.commands.PlayerCommunicator.warn
 import de.randombyte.mobrepeller.commands.PlayerCommunicator.success
 import org.spongepowered.api.command.CommandResult
 import org.spongepowered.api.command.CommandSource
@@ -20,13 +22,16 @@ class RegisterRepeller : CommandExecutor {
             else -> src
         }
 
-        val groundBlock = player.location.getRelative(Direction.DOWN)
-        val repellerRadius = CrossShapeChecker.checkCross(groundBlock)
-        //Ignore repeller with 0 radius
-        if (repellerRadius == 0) return src.fail("Not standing on a repeller!")
-        MobRepeller.repellers[groundBlock] = repellerRadius
-        src.success("Added cross with value $repellerRadius at ${groundBlock.position.toInt()}")
+        val groundBlock = player.location.getRelative(Direction.DOWN).toInt()
 
-        return CommandResult.success()
+        return when (State.tryRegisteringRepeller(groundBlock)) {
+            CREATED -> {
+                src.success("Added MobRepeller with radius of ${State.repellers[groundBlock]} at ${groundBlock.blockPosition}")
+            }
+            NO_REPELLER -> {
+                src.fail("Not standing on a repeller!")
+            }
+            else -> src.warn("Undefined state!")
+        }
     }
 }

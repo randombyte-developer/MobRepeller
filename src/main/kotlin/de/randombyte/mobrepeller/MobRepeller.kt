@@ -1,6 +1,7 @@
 package de.randombyte.mobrepeller
 
 import com.google.inject.Inject
+import de.randombyte.mobrepeller.State.RepellerRegistrationResult.*
 import de.randombyte.mobrepeller.commands.ListRepellers
 import de.randombyte.mobrepeller.commands.PlayerCommunicator.warn
 import de.randombyte.mobrepeller.commands.RegisterRepeller
@@ -63,8 +64,33 @@ class MobRepeller {
         }
     }
 
-    //todo: do it in a more elegant way
     @Listener
+    fun onBreakBlock2(event: ChangeBlockEvent.Break) {
+        event.transactions.filter { it.final.location.isPresent }.forEach {
+            val removedBlock = it.final.location.get()
+            State.repellers.filter { it.key.inExtent(removedBlock.extent) }.forEach { repeller ->
+                val centerBlock = repeller.key
+                if (repeller.value.second.any { it.equals(removedBlock.blockPosition) }) {
+                    //removedBlock belongs to repeller
+                    repellers.remove(centerBlock)
+                    val result = State.tryRegisteringRepeller(centerBlock)
+                    //notify user
+                    val playerCauseOpt = event.cause.first(Player::class.java)
+                    if (playerCauseOpt.isPresent) {
+                        val player = playerCauseOpt.get()
+                        if (result == UPDATED) {
+                            player.warn("Changed radius of MobRepeller at ${centerBlock.blockPosition}" +
+                                    "to ${State.repellers[centerBlock]}!")
+                        } else {
+                            player.warn("Removed MobRepeller at ${centerBlock.blockPosition}!")
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    //todo: do it in a more elegant way
     fun onBreakBlock(event: ChangeBlockEvent.Break) {
         event.transactions.forEach {
             if (!it.final.location.isPresent) return@forEach //This instead 'filter' for better performance

@@ -22,9 +22,12 @@ object CrossShapeChecker {
      * @return All blocks belonging to the whole cross.
      */
     fun getCrossBlocks(centerBlock: Location<World>): List<Vector3i> {
+        val centerPos = if (blockTypes.containsKey(centerBlock.blockType)) centerBlock.blockPosition else return emptyList()
         return directions.map { direction ->
-            getCrossArmBlocks(centerBlock, direction)
-        }.flatMap { it }.plus(centerBlock.blockPosition)
+            val armBlocks = getCrossArmBlocks(centerBlock, direction)
+            if (armBlocks.size < 1) return emptyList() //Every arm has to have at least one block in arm
+            return@map armBlocks
+        }.flatMap { it } + centerPos
     }
 
     /**
@@ -33,7 +36,7 @@ object CrossShapeChecker {
     fun getCrossArmBlocks(centerBlock: Location<World>, direction: Direction): List<Vector3i> {
         val blockToCheck = centerBlock.getRelative(direction)
         return if (blockTypes.containsKey(blockToCheck.blockType)) {
-            getCrossArmBlocks(centerBlock, direction).plus(blockToCheck.blockPosition)
+            getCrossArmBlocks(blockToCheck, direction).plus(blockToCheck.blockPosition)
         } else emptyList()
     }
 }

@@ -6,7 +6,7 @@ import org.spongepowered.api.text.Text
 import org.spongepowered.api.text.format.TextColors
 
 object PlayerCommunicator {
-    fun CommandSource.fail(message: String): CommandResult {
+    fun CommandSource.error(message: String): CommandResult {
         sendMessage(Text.of(TextColors.DARK_RED, message))
         return CommandResult.empty()
     }

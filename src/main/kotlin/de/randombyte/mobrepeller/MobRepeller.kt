@@ -47,80 +47,22 @@ class MobRepeller {
                 .description(Text.of("Lists all MobRepellers in this world"))
                 .build(), "listRepellers")
 
+        Sponge.getEventManager().registerListener(this, ChangeBlockEvent.Place::class.java, PlaceBlockListener())
+        Sponge.getEventManager().registerListener(this, ChangeBlockEvent.Break::class.java, BreakBlockListener())
+
         logger.info("Loaded ${PluginInfo.NAME}: ${PluginInfo.VERSION}!")
     }
 
     @Listener
     fun onMobSpawn(event: SpawnEntityEvent) {
         //todo: Don't prevent "custom spawning"
-        event.filterEntities { entity ->
-            entity !is Monster || repellers.none { repeller ->
+        event.filterEntities { entity -> //'false' entities will be sorted out
+            entity !is Monster || State.repellers.none { repeller ->
                 //check if in same world
                 repeller.key.extent.uniqueId.equals(entity.world.uniqueId) &&
                     //check if entity is in radius of repeller
-                    repeller.key.position.distance(entity.location.position) <= repeller.value
+                    repeller.key.position.distance(entity.location.position) <= repeller.value.first
 
-            }
-        }
-    }
-
-    @Listener
-    fun onBreakBlock2(event: ChangeBlockEvent.Break) {
-        event.transactions.filter { it.final.location.isPresent }.forEach {
-            val removedBlock = it.final.location.get()
-            State.repellers.filter { it.key.inExtent(removedBlock.extent) }.forEach { repeller ->
-                val centerBlock = repeller.key
-                if (repeller.value.second.any { it.equals(removedBlock.blockPosition) }) {
-                    //removedBlock belongs to repeller
-                    repellers.remove(centerBlock)
-                    val result = State.tryRegisteringRepeller(centerBlock)
-                    //notify user
-                    val playerCauseOpt = event.cause.first(Player::class.java)
-                    if (playerCauseOpt.isPresent) {
-                        val player = playerCauseOpt.get()
-                        if (result == UPDATED) {
-                            player.warn("Changed radius of MobRepeller at ${centerBlock.blockPosition}" +
-                                    "to ${State.repellers[centerBlock]}!")
-                        } else {
-                            player.warn("Removed MobRepeller at ${centerBlock.blockPosition}!")
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    //todo: do it in a more elegant way
-    fun onBreakBlock(event: ChangeBlockEvent.Break) {
-        event.transactions.forEach {
-            if (!it.final.location.isPresent) return@forEach //This instead 'filter' for better performance
-            val removedBlock = it.final.location.get()
-
-            if (repellers.remove(removedBlock) != null) {
-                //Center block removed
-                //todo: compare like below
-                val rootCause = event.cause.root()
-                if (rootCause is Player) rootCause.warn("Deregistered MobRepeller at ${removedBlock.position.toInt()}!")
-            } else {
-                val iterator = repellers.iterator()
-                while (iterator.hasNext()) {
-                    var repeller = iterator.next()
-                    while (!repeller.key.extent.equals(removedBlock.extent)) {
-                        if (!iterator.hasNext()) return
-                        repeller = iterator.next()
-                    }
-                    CrossShapeChecker.directions.forEach { direction ->
-                        val relative = removedBlock.getRelative(direction)
-                        if (repeller.key.position.toInt().equals(relative.position.toInt())) {
-                            //Needed block in cross shape removed
-                            iterator.remove()
-                            val rootCause = event.cause.root()
-                            if (rootCause is Player) rootCause.warn("Deregistered MobRepeller at " +
-                                    "${removedBlock.position.toInt()}!")
-                            return
-                        }
-                    }
-                }
             }
         }
     }

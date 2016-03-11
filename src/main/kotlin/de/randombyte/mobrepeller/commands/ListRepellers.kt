@@ -1,7 +1,7 @@
 package de.randombyte.mobrepeller.commands
 
-import de.randombyte.mobrepeller.MobRepeller
-import de.randombyte.mobrepeller.commands.PlayerCommunicator.fail
+import de.randombyte.mobrepeller.commands.PlayerCommunicator.error
+import de.randombyte.mobrepeller.State
 import org.spongepowered.api.Sponge
 import org.spongepowered.api.command.CommandResult
 import org.spongepowered.api.command.CommandSource
@@ -16,10 +16,10 @@ class ListRepellers : CommandExecutor {
     override fun execute(src: CommandSource?, ctx: CommandContext?): CommandResult? {
         when (src) {
             null -> return CommandResult.empty()
-            !is Player -> return src.fail("Command must be executed by a player!")
+            !is Player -> return src.error("Command must be executed by a player!")
         }
 
-        val repellerTexts = MobRepeller.repellers.map { repeller ->
+        val repellerTexts = State.repellers.map { repeller ->
             Text.of("${repeller.key.position.toString()} with radius ${repeller.value}",
                     TextActions.executeCallback { src ->
                         src.sendMessage(Text.of("Click on repeller at ${repeller.key.position.toInt()}"))

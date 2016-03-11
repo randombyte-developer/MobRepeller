@@ -15,13 +15,14 @@ import org.spongepowered.api.event.Listener
 import org.spongepowered.api.event.block.ChangeBlockEvent
 import org.spongepowered.api.event.entity.SpawnEntityEvent
 import org.spongepowered.api.event.game.state.GameInitializationEvent
+import org.spongepowered.api.plugin.Dependency
 import org.spongepowered.api.plugin.Plugin
 import org.spongepowered.api.text.Text
 import org.spongepowered.api.world.Location
 import org.spongepowered.api.world.World
 import java.util.*
 
-@Plugin(id = PluginInfo.ID, name = PluginInfo.NAME, version = PluginInfo.VERSION, dependencies = "after: Updatifier")
+@Plugin(id = PluginInfo.ID, name = PluginInfo.NAME, version = PluginInfo.VERSION)
 @Updatifier(repoOwner = "randombyte-developer", repoName = PluginInfo.NAME, version = PluginInfo.VERSION)
 class MobRepeller {
 

@@ -42,10 +42,10 @@ class MobRepeller {
                     "the center of the cross."))
             .build(), "registerRepeller")
 
-        Sponge.getCommandManager().register(this, CommandSpec.builder()
+        /*Sponge.getCommandManager().register(this, CommandSpec.builder()
                 .executor(ListRepellers())
                 .description(Text.of("Lists all MobRepellers in this world"))
-                .build(), "listRepellers")
+                .build(), "listRepellers")*/
 
         Sponge.getEventManager().registerListener(this, ChangeBlockEvent.Place::class.java, PlaceBlockListener())
         Sponge.getEventManager().registerListener(this, ChangeBlockEvent.Break::class.java, BreakBlockListener())

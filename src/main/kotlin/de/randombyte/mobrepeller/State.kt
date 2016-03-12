@@ -12,8 +12,6 @@ import kotlin.system.measureTimeMillis
  * Singleton for storing the current state of the plugin(data, ...) and doing centralized things
  */
 object State {
-
-    var logger: Logger? = null
     //centerBlockLocation, <radius, blocksRepresentingCross>
     var repellers: MutableMap<Location<World>, Pair<Int, List<Vector3i>>> = HashMap() //Todo: SQL
 

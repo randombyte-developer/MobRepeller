@@ -26,7 +26,7 @@ class BreakBlockListener : EventListener<ChangeBlockEvent.Break> {
                         val registeredRepeller = State.repellers[centerBlock]
                         when (result) {
                             UPDATED -> player.warn("Updated radius of MobRepeller to ${registeredRepeller!!.first}!")
-                            DUPLICATE -> player.warn("Already registered with radius ${registeredRepeller!!.first}")
+                            DUPLICATE -> player.warn("MobRepeller already registered with radius ${registeredRepeller!!.first}!")
                             NO_REPELLER -> player.error("Undefined state: Tried removing repeller because repeller block " +
                                     "was broken but that repeller isn't registered!")
                             REMOVED -> player.warn("Removed MobRepeller!")

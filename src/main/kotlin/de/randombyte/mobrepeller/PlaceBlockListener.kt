@@ -24,7 +24,7 @@ class PlaceBlockListener : EventListener<ChangeBlockEvent.Place> {
             //is the blockType of defined blockTypes(those blocks aren't common)
             State.repellers.forEach { repeller ->
                 if (State.tryRegisteringRepeller(repeller.key) == UPDATED) {
-                    player?.warn("Updated radius of MobRepeller ${State.repellers[repeller.key]!!.first}")
+                    player?.warn("Updated radius of MobRepeller to ${State.repellers[repeller.key]!!.first}!")
                     return
                 }
             }

@@ -52,7 +52,7 @@ class MobRepeller {
     }
 
     @Listener
-    fun onMobSpawn(event: ConstructEntityEvent.Pre) {
+    fun onConstructEntity(event: ConstructEntityEvent.Pre) {
         event.isCancelled =
                 Monster::class.java.isAssignableFrom(event.targetType.entityClass) && //is Monster
                 State.repellers.filter { it.key.inExtent(event.transform.extent) } //is in same Extent as one repeller

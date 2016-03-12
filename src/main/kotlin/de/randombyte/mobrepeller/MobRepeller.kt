@@ -9,10 +9,12 @@ import me.flibio.updatifier.Updatifier
 import org.slf4j.Logger
 import org.spongepowered.api.Sponge
 import org.spongepowered.api.command.spec.CommandSpec
+import org.spongepowered.api.entity.Entity
 import org.spongepowered.api.entity.living.monster.Monster
 import org.spongepowered.api.entity.living.player.Player
 import org.spongepowered.api.event.Listener
 import org.spongepowered.api.event.block.ChangeBlockEvent
+import org.spongepowered.api.event.entity.ConstructEntityEvent
 import org.spongepowered.api.event.entity.SpawnEntityEvent
 import org.spongepowered.api.event.game.state.GameInitializationEvent
 import org.spongepowered.api.plugin.Dependency
@@ -25,11 +27,6 @@ import java.util.*
 @Plugin(id = PluginInfo.ID, name = PluginInfo.NAME, version = PluginInfo.VERSION)
 @Updatifier(repoOwner = "randombyte-developer", repoName = PluginInfo.NAME, version = PluginInfo.VERSION)
 class MobRepeller {
-
-    companion object {
-        //Where the cross' center is and what radius it protects
-        var repellers: MutableMap<Location<World>, Int> = HashMap() //Todo: SQL
-    }
 
     @Inject
     private lateinit var logger: Logger
@@ -55,16 +52,10 @@ class MobRepeller {
     }
 
     @Listener
-    fun onMobSpawn(event: SpawnEntityEvent) {
-        //todo: Don't prevent "custom spawning"
-        event.filterEntities { entity -> //'false' entities will be sorted out
-            entity !is Monster || State.repellers.none { repeller ->
-                //check if in same world
-                repeller.key.extent.uniqueId.equals(entity.world.uniqueId) &&
-                    //check if entity is in radius of repeller
-                    repeller.key.position.distance(entity.location.position) <= repeller.value.first
-
-            }
-        }
+    fun onMobSpawn(event: ConstructEntityEvent.Pre) {
+        event.isCancelled =
+                Monster::class.java.isAssignableFrom(event.targetType.entityClass) && //is Monster
+                State.repellers.filter { it.key.inExtent(event.transform.extent) } //is in same Extent as one repeller
+                .any { it.key.position.distance(event.transform.position) <= it.value.first } //is in radius of that repeller
     }
 }

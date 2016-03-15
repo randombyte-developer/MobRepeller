@@ -1,8 +1,8 @@
 package de.randombyte.mobrepeller.commands
 
+import de.randombyte.mobrepeller.State
 import de.randombyte.mobrepeller.commands.PlayerCommunicator.error
 import de.randombyte.mobrepeller.commands.PlayerCommunicator.warn
-import de.randombyte.mobrepeller.State
 import org.spongepowered.api.Sponge
 import org.spongepowered.api.command.CommandResult
 import org.spongepowered.api.command.CommandSource
@@ -12,7 +12,8 @@ import org.spongepowered.api.entity.living.player.Player
 import org.spongepowered.api.service.pagination.PaginationService
 import org.spongepowered.api.text.Text
 import org.spongepowered.api.text.action.TextActions
-import org.spongepowered.api.text.format.TextColors.*
+import org.spongepowered.api.text.format.TextColors.GREEN
+import org.spongepowered.api.text.format.TextColors.YELLOW
 
 class ListRepellers : CommandExecutor {
     override fun execute(src: CommandSource?, ctx: CommandContext?): CommandResult? {
@@ -28,7 +29,7 @@ class ListRepellers : CommandExecutor {
         val repellerTexts = repellersInWorld.map { repeller ->
             Text.builder()
                     .append(Text.of(YELLOW, "Position: ${repeller.key.position.toString()} "))
-                    .append(Text.of(GREEN, "Radius: ${repeller.value.first}"))
+                    .append(Text.of(GREEN, "Radius: ${repeller.value.radius}"))
                     .onClick(TextActions.executeCallback { src ->
                         src.sendMessage(Text.of("Click on repeller at ${repeller.key.position.toInt()}"))
                     }).build()

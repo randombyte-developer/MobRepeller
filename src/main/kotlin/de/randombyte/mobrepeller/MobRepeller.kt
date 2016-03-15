@@ -1,28 +1,22 @@
 package de.randombyte.mobrepeller
 
 import com.google.inject.Inject
-import de.randombyte.mobrepeller.State.RepellerRegistrationResult.*
 import de.randombyte.mobrepeller.commands.ListRepellers
-import de.randombyte.mobrepeller.commands.PlayerCommunicator.warn
 import de.randombyte.mobrepeller.commands.RegisterRepeller
+import de.randombyte.mobrepeller.database.DatabaseManager
 import me.flibio.updatifier.Updatifier
+import org.h2.tools.Server
 import org.slf4j.Logger
 import org.spongepowered.api.Sponge
 import org.spongepowered.api.command.spec.CommandSpec
-import org.spongepowered.api.entity.Entity
 import org.spongepowered.api.entity.living.monster.Monster
-import org.spongepowered.api.entity.living.player.Player
 import org.spongepowered.api.event.Listener
 import org.spongepowered.api.event.block.ChangeBlockEvent
 import org.spongepowered.api.event.entity.ConstructEntityEvent
-import org.spongepowered.api.event.entity.SpawnEntityEvent
 import org.spongepowered.api.event.game.state.GameInitializationEvent
-import org.spongepowered.api.plugin.Dependency
+import org.spongepowered.api.event.world.LoadWorldEvent
 import org.spongepowered.api.plugin.Plugin
 import org.spongepowered.api.text.Text
-import org.spongepowered.api.world.Location
-import org.spongepowered.api.world.World
-import java.util.*
 
 @Plugin(id = PluginInfo.ID, name = PluginInfo.NAME, version = PluginInfo.VERSION)
 @Updatifier(repoOwner = "randombyte-developer", repoName = PluginInfo.NAME, version = PluginInfo.VERSION)
@@ -31,8 +25,16 @@ class MobRepeller {
     @Inject
     private lateinit var logger: Logger
 
+    var wevServer: Server? = null
+
     @Listener
     fun onInit(event: GameInitializationEvent) {
+
+        //DEBUGGING
+        //wevServer = Server.createWebServer("-web", "-webAllowOthers", "-webPort", "8082").start()
+
+        State.logger = logger
+
         Sponge.getCommandManager().register(this, CommandSpec.builder()
             .executor(RegisterRepeller())
             .description(Text.of("Registers a MobRepeller"))
@@ -52,10 +54,20 @@ class MobRepeller {
     }
 
     @Listener
+    fun onLoadWorldEvent(event: LoadWorldEvent) {
+        loadConfigurations()
+        logger.info("Reloaded world's MobRepellers due to new loaded world!")
+    }
+
+    fun loadConfigurations() {
+        State.repellers = DatabaseManager.getAllRepellers() //creates database if it doesn't exist yet
+    }
+
+    @Listener
     fun onConstructEntity(event: ConstructEntityEvent.Pre) {
         event.isCancelled =
                 Monster::class.java.isAssignableFrom(event.targetType.entityClass) && //is Monster
                 State.repellers.filter { it.key.inExtent(event.transform.extent) } //is in same Extent as one repeller
-                .any { it.key.position.distance(event.transform.position) <= it.value.first } //is in radius of that repeller
+                .any { it.key.position.distance(event.transform.position) <= it.value.radius } //is in radius of that repeller
     }
 }

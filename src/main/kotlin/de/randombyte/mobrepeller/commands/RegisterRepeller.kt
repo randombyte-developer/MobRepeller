@@ -1,11 +1,11 @@
 package de.randombyte.mobrepeller.commands
 
 import de.randombyte.mobrepeller.State
-import de.randombyte.mobrepeller.State.toInt
 import de.randombyte.mobrepeller.State.RepellerRegistrationResult.*
+import de.randombyte.mobrepeller.State.toInt
 import de.randombyte.mobrepeller.commands.PlayerCommunicator.error
-import de.randombyte.mobrepeller.commands.PlayerCommunicator.warn
 import de.randombyte.mobrepeller.commands.PlayerCommunicator.success
+import de.randombyte.mobrepeller.commands.PlayerCommunicator.warn
 import org.spongepowered.api.command.CommandResult
 import org.spongepowered.api.command.CommandSource
 import org.spongepowered.api.command.args.CommandContext
@@ -26,11 +26,11 @@ class RegisterRepeller : CommandExecutor {
 
         return when (State.tryRegisteringRepeller(groundBlock)) {
             CREATED -> {
-                src.success("Created MobRepeller with radius of ${State.repellers[groundBlock]!!.first} at ${groundBlock.blockPosition}!")
+                src.success("Created MobRepeller with radius of ${State.repellers[groundBlock]!!.radius} at ${groundBlock.blockPosition}!")
             }
             NO_REPELLER -> src.error("Not standing on a MobRepeller!")
-            DUPLICATE -> src.warn("MobRepeller already registered with radius ${State.repellers[groundBlock]!!.first}!")
-            UPDATED -> src.warn("Updated MobRepeller to radius ${State.repellers[groundBlock]!!.first}!")
+            DUPLICATE -> src.warn("MobRepeller already registered with radius ${State.repellers[groundBlock]!!.radius}!")
+            UPDATED -> src.warn("Updated MobRepeller to radius ${State.repellers[groundBlock]!!.radius}!")
             REMOVED -> src.error("Undefined state: Removed MobRepeller by playing a block!")
         }
     }

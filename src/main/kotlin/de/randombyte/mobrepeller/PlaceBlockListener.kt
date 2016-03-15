@@ -19,7 +19,7 @@ class PlaceBlockListener : EventListener<ChangeBlockEvent.Place> {
         val playerOpt = event.cause.first(Player::class.java)
         val player = if (playerOpt.isPresent) playerOpt.get() else null
         event.transactions.filter { it.final.location.isPresent
-                && CrossShapeChecker.blockTypes.containsKey(it.final.location.get().blockType) }.forEach { transaction ->
+                && CrossShapeChecker.blockTypes.containsKey(it.final.state.type) }.forEach { transaction ->
 
             //Update all repellers; this isn't that bad for performance because it only checks this if the placed block
             //is the blockType of defined blockTypes(those blocks aren't common)

@@ -28,18 +28,21 @@ object State {
 
         val alreadyRegisteredRepeller = repellers[centerBlock.toInt()]
         return if (alreadyRegisteredRepeller != null) {
-            when (currentRadius) {
-                0 -> {
+            when {
+                currentRadius == 0 -> {
                     DatabaseManager.removeRepeller(alreadyRegisteredRepeller.id)
                     repellers = DatabaseManager.getAllRepellers()
                     REMOVED
                 }
-                alreadyRegisteredRepeller.radius -> {
+                currentRadius != alreadyRegisteredRepeller.radius -> {
                     DatabaseManager.updateRepellerRadius(alreadyRegisteredRepeller.id, currentRadius)
                     repellers = DatabaseManager.getAllRepellers()
                     UPDATED
                 }
-                else -> DUPLICATE
+                currentRadius == alreadyRegisteredRepeller.radius -> DUPLICATE
+                else -> {
+                    throw IllegalStateException("This can't happen!")
+                }
             }
         } else {
             when (currentRadius) {

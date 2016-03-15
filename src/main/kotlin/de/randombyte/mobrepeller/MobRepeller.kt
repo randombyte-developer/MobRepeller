@@ -31,7 +31,7 @@ class MobRepeller {
     fun onInit(event: GameInitializationEvent) {
 
         //DEBUGGING
-        wevServer = Server.createWebServer("-web", "-webAllowOthers", "-webPort", "8082").start()
+        //wevServer = Server.createWebServer("-web", "-webAllowOthers", "-webPort", "8082").start()
 
         State.logger = logger
 

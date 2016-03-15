@@ -14,6 +14,7 @@ import org.spongepowered.api.event.Listener
 import org.spongepowered.api.event.block.ChangeBlockEvent
 import org.spongepowered.api.event.entity.ConstructEntityEvent
 import org.spongepowered.api.event.game.state.GameInitializationEvent
+import org.spongepowered.api.event.world.LoadWorldEvent
 import org.spongepowered.api.plugin.Plugin
 import org.spongepowered.api.text.Text
 
@@ -49,9 +50,13 @@ class MobRepeller {
         Sponge.getEventManager().registerListener(this, ChangeBlockEvent.Place::class.java, PlaceBlockListener())
         Sponge.getEventManager().registerListener(this, ChangeBlockEvent.Break::class.java, BreakBlockListener())
 
-        loadConfigurations()
-
         logger.info("Loaded ${PluginInfo.NAME}: ${PluginInfo.VERSION}!")
+    }
+
+    @Listener
+    fun onLoadWorldEvent(event: LoadWorldEvent) {
+        loadConfigurations()
+        logger.info("Reloaded world's MobRepellers due to new loaded world!")
     }
 
     fun loadConfigurations() {

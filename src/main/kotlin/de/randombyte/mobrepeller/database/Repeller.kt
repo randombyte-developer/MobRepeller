@@ -20,7 +20,7 @@ data class Repeller(val id: Int, val radius: Int) {
                 val worldOpt = Sponge.getServer().getWorld(UUID.fromString(worldUuid))
                 if (!worldOpt.isPresent) {
                     State.logger?.warn("Removing MobRepellers of world with UUID $worldUuid because that world isn't loaded!")
-                    //todo: delete
+                    //todo: consider not deleting the entry
                     continue
                 }
                 map[Location<World>(worldOpt.get(), row[Repellers.x], row[Repellers.y], row[Repellers.z])] =

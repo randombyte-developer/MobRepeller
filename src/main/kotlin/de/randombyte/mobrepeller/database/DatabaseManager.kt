@@ -9,7 +9,7 @@ object DatabaseManager {
 
     val sqlService: SqlService by SqlServiceDelegate() //lazyinit
 
-    fun getDataSource() = sqlService.getDataSource("jdbc:h2:MobRepeller.db")
+    fun getDataSource() = sqlService.getDataSource("jdbc:h2:./MobRepeller.db")
 
     fun getAllRepellers() = Database.connect(getDataSource()).transaction { Repeller.fromQuery(Repellers.selectAll()) }
 

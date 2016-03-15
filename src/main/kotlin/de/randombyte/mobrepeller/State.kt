@@ -23,8 +23,6 @@ object State {
     }
 
     fun tryRegisteringRepeller(centerBlock: Location<World>): RepellerRegistrationResult {
-        fun Location<World>.toInt(): Location<World> = Location(extent, blockPosition)
-
         val crossBlocks = CrossShapeChecker.getCrossBlocks(centerBlock)
         val currentRadius = CrossShapeChecker.calculateRadius(centerBlock.extent, crossBlocks)
 
@@ -51,4 +49,7 @@ object State {
             }
         }
     }
+
+    fun Location<World>.toInt(): Location<World> = Location(extent, blockPosition)
+
 }

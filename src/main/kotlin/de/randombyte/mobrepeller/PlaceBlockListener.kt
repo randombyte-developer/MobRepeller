@@ -34,8 +34,10 @@ class PlaceBlockListener : EventListener<ChangeBlockEvent.Place> {
             val placedBlock = transaction.final.location.get()
             val blocksToTry = CrossShapeChecker.directions.map { placedBlock.getRelative(it) } + placedBlock
             blocksToTry.forEach {
-                if (State.tryRegisteringRepeller(it) == CREATED) {
-                    player?.success("Created MobRepeller with radius of ${State.repellers[it]!!.radius}!")
+                val r = State.tryRegisteringRepeller(it)
+                if (r == CREATED) {
+                    val a = State.repellers[it]
+                    player?.success("Created MobRepeller with radius of ${a!!.radius}!")
                     return
                 }
             }

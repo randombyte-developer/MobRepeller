@@ -31,10 +31,12 @@ object State {
             when (currentRadius) {
                 0 -> {
                     DatabaseManager.removeRepeller(alreadyRegisteredRepeller.id)
+                    repellers = DatabaseManager.getAllRepellers()
                     REMOVED
                 }
                 alreadyRegisteredRepeller.radius -> {
                     DatabaseManager.updateRepellerRadius(alreadyRegisteredRepeller.id, currentRadius)
+                    repellers = DatabaseManager.getAllRepellers()
                     UPDATED
                 }
                 else -> DUPLICATE
@@ -44,6 +46,7 @@ object State {
                 0 -> NO_REPELLER
                 else -> {
                     DatabaseManager.createRepeller(centerBlock.toInt(), currentRadius)
+                    repellers = DatabaseManager.getAllRepellers()
                     CREATED
                 }
             }

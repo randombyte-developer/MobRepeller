@@ -12,9 +12,10 @@ class BreakBlockListener : EventListener<ChangeBlockEvent.Break> {
     override fun handle(event: ChangeBlockEvent.Break?) {
         if (event == null) return
 
-        event.transactions.filter { it.final.location.isPresent }.forEach {
-            val removedBlock = it.final.location.get()
-            if (!CrossShapeChecker.blockTypes.containsKey(removedBlock.blockType)) return@forEach
+        event.transactions.forEach {
+            val removedBlockType = it.original.state.type
+            val removedBlock = it.original.location.get()
+            if (!CrossShapeChecker.blockTypes.containsKey(removedBlockType)) return@forEach
             State.repellers.filter { it.key.inExtent(removedBlock.extent) }.forEach { repeller ->
                 //try reregistering every repeller in same world as removedBlock
                 val result = State.tryRegisteringRepeller(repeller.key)

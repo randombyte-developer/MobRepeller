@@ -5,6 +5,7 @@ import org.jetbrains.exposed.sql.Query
 import org.spongepowered.api.Sponge
 import org.spongepowered.api.world.Location
 import org.spongepowered.api.world.World
+import java.util.*
 
 /**
  * Internal representation in database
@@ -16,7 +17,7 @@ data class Repeller(val id: Int, val radius: Int) {
             val map = mutableMapOf<Location<World>, Repeller>()
             for (row in query) {
                 val worldUuid = row[Repellers.worldUUID]
-                val worldOpt = Sponge.getServer().getWorld(worldUuid)
+                val worldOpt = Sponge.getServer().getWorld(UUID.fromString(worldUuid))
                 if (!worldOpt.isPresent) {
                     State.logger?.warn("Removing MobRepellers of world with UUID $worldUuid because that world isn't loaded!")
                     //todo: delete

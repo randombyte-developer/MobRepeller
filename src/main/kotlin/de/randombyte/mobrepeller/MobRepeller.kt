@@ -5,6 +5,7 @@ import de.randombyte.mobrepeller.commands.ListRepellers
 import de.randombyte.mobrepeller.commands.RegisterRepeller
 import de.randombyte.mobrepeller.database.DatabaseManager
 import me.flibio.updatifier.Updatifier
+import org.h2.tools.Server
 import org.slf4j.Logger
 import org.spongepowered.api.Sponge
 import org.spongepowered.api.command.spec.CommandSpec
@@ -23,8 +24,14 @@ class MobRepeller {
     @Inject
     private lateinit var logger: Logger
 
+    var wevServer: Server? = null
+
     @Listener
     fun onInit(event: GameInitializationEvent) {
+
+        //DEBUGGING
+        wevServer = Server.createWebServer("-web", "-webAllowOthers", "-webPort", "8082").start()
+
         State.logger = logger
 
         Sponge.getCommandManager().register(this, CommandSpec.builder()
@@ -48,7 +55,7 @@ class MobRepeller {
     }
 
     fun loadConfigurations() {
-        State.repellers = DatabaseManager.getAllRepellers()
+        State.repellers = DatabaseManager.getAllRepellers() //creates database if it doesn't exist yet
     }
 
     @Listener

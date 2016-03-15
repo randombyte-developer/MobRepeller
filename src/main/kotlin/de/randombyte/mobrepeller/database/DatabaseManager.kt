@@ -11,7 +11,10 @@ object DatabaseManager {
 
     fun getDataSource() = sqlService.getDataSource("jdbc:h2:./MobRepeller.db")
 
-    fun getAllRepellers() = Database.connect(getDataSource()).transaction { Repeller.fromQuery(Repellers.selectAll()) }
+    fun getAllRepellers() = Database.connect(getDataSource()).transaction {
+        if (!Repellers.exists()) create(Repellers)
+        Repeller.fromQuery(Repellers.selectAll())
+    }
 
     fun updateRepellerRadius(id: Int, newRadius: Int) {
         Database.connect(getDataSource()).transaction {

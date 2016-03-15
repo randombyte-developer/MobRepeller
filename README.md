@@ -1,2 +1,2 @@
 # MobRepeller
-Sponge-Plugin: Blocks spawning mobs in a radius around a repeller
+Forum: https://forums.spongepowered.org/t/wip-mobrepeller-prevent-mob-spawning-in-survival/11757

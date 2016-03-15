@@ -9,6 +9,7 @@ import org.h2.tools.Server
 import org.slf4j.Logger
 import org.spongepowered.api.Sponge
 import org.spongepowered.api.command.spec.CommandSpec
+import org.spongepowered.api.config.ConfigDir
 import org.spongepowered.api.entity.living.monster.Monster
 import org.spongepowered.api.event.Listener
 import org.spongepowered.api.event.block.ChangeBlockEvent
@@ -17,13 +18,18 @@ import org.spongepowered.api.event.game.state.GameInitializationEvent
 import org.spongepowered.api.event.world.LoadWorldEvent
 import org.spongepowered.api.plugin.Plugin
 import org.spongepowered.api.text.Text
+import java.nio.file.Path
 
 @Plugin(id = PluginInfo.ID, name = PluginInfo.NAME, version = PluginInfo.VERSION)
 @Updatifier(repoOwner = "randombyte-developer", repoName = PluginInfo.NAME, version = PluginInfo.VERSION)
 class MobRepeller {
 
     @Inject
-    private lateinit var logger: Logger
+    lateinit var logger: Logger
+
+    @Inject
+    @ConfigDir(sharedRoot = false)
+    lateinit var pluginConfigDir: Path
 
     var wevServer: Server? = null
 
@@ -49,6 +55,8 @@ class MobRepeller {
 
         Sponge.getEventManager().registerListener(this, ChangeBlockEvent.Place::class.java, PlaceBlockListener())
         Sponge.getEventManager().registerListener(this, ChangeBlockEvent.Break::class.java, BreakBlockListener())
+
+        DatabaseManager.databasePath = pluginConfigDir.resolve("MobRepeller").toAbsolutePath().toString()
 
         logger.info("Loaded ${PluginInfo.NAME}: ${PluginInfo.VERSION}!")
     }

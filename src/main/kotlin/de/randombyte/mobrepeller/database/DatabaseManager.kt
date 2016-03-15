@@ -7,9 +7,11 @@ import org.spongepowered.api.world.World
 
 object DatabaseManager {
 
+    var databasePath = "./MobRepeller"
+
     val sqlService: SqlService by SqlServiceDelegate() //lazyinit
 
-    fun getDataSource() = sqlService.getDataSource("jdbc:h2:./MobRepeller.db")
+    fun getDataSource() = sqlService.getDataSource("jdbc:h2:$databasePath")
 
     fun getAllRepellers() = Database.connect(getDataSource()).transaction {
         if (!Repellers.exists()) create(Repellers)

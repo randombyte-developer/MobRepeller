@@ -31,7 +31,7 @@ class RegisterRepeller : CommandExecutor {
             NO_REPELLER -> src.error("Not standing on a MobRepeller!")
             DUPLICATE -> src.warn("MobRepeller already registered with radius ${State.repellers[groundBlock]!!.radius}!")
             UPDATED -> src.warn("Updated MobRepeller to radius ${State.repellers[groundBlock]!!.radius}!")
-            REMOVED -> src.error("Undefined state: Removed MobRepeller by playing a block!")
+            REMOVED -> src.error("Undefined state: Removed MobRepeller by placing a block!")
         }
     }
 }

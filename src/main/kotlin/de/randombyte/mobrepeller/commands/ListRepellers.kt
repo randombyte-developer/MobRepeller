@@ -1,5 +1,6 @@
 package de.randombyte.mobrepeller.commands
 
+import com.flowpowered.math.vector.Vector3d
 import de.randombyte.mobrepeller.State
 import de.randombyte.mobrepeller.commands.PlayerCommunicator.error
 import de.randombyte.mobrepeller.commands.PlayerCommunicator.warn
@@ -30,17 +31,24 @@ class ListRepellers : CommandExecutor {
             Text.builder()
                     .append(Text.of(YELLOW, "Position: ${repeller.key.position.toString()} "))
                     .append(Text.of(GREEN, "Radius: ${repeller.value.radius}"))
-                    .onClick(TextActions.executeCallback { src ->
-                        src.sendMessage(Text.of("Click on repeller at ${repeller.key.position.toInt()}"))
-                    }).build()
+                    .onHover(TextActions.showText(getHoverText(repeller.key.position, player.location.position,
+                            repeller.value.radius)))
+                    .build()
         }
 
         val paginationServcie = Sponge.getServiceManager().provide(PaginationService::class.java).get()
         paginationServcie.builder()
-            .header(Text.of(GREEN, "${repellersInWorld.size} MobRepeller(s) in this world: "))
+            .header(Text.of(GREEN, "== ${repellersInWorld.size} MobRepeller(s) in this world: =="))
             .contents(repellerTexts)
             .sendTo(src)
 
         return CommandResult.success()
+    }
+
+    fun getHoverText(repellerPos: Vector3d, playerPos: Vector3d, repellerRadius: Int): Text {
+        val blocksToRepeller = repellerPos.distance(playerPos).toInt()
+        return if (blocksToRepeller <= repellerRadius) {
+            Text.of(GREEN, "In radius; $blocksToRepeller blocks away")
+        } else Text.of(GREEN, "In radius; $blocksToRepeller blocks away")
     }
 }

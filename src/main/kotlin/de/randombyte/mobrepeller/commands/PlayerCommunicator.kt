@@ -18,6 +18,6 @@ object PlayerCommunicator {
 
     fun CommandSource.warn(message: String): CommandResult {
         sendMessage(Text.of(TextColors.YELLOW, message))
-        return CommandResult.success()
+        return CommandResult.empty()
     }
 }

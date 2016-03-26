@@ -20,7 +20,7 @@ import org.spongepowered.api.plugin.Plugin
 import org.spongepowered.api.text.Text
 import java.nio.file.Path
 
-@Plugin(id = PluginInfo.ID, name = PluginInfo.NAME, version = PluginInfo.VERSION)
+@Plugin(id = PluginInfo.ID, name = PluginInfo.NAME, version = PluginInfo.VERSION, authors = arrayOf(PluginInfo.AUTHOR))
 @Updatifier(repoOwner = "randombyte-developer", repoName = PluginInfo.NAME, version = PluginInfo.VERSION)
 class MobRepeller {
 

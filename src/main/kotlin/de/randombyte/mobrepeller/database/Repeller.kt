@@ -12,15 +12,13 @@ import java.util.*
  */
 data class Repeller(val id: Int, val radius: Int) {
     companion object {
-
         fun fromQuery(query: Query): MutableMap<Location<World>, Repeller> {
             val map = mutableMapOf<Location<World>, Repeller>()
             for (row in query) {
                 val worldUuid = row[Repellers.worldUUID]
                 val worldOpt = Sponge.getServer().getWorld(UUID.fromString(worldUuid))
                 if (!worldOpt.isPresent) {
-                    State.logger?.warn("Removing MobRepellers of world with UUID $worldUuid because that world isn't loaded!")
-                    //todo: consider not deleting the entry
+                    State.logger?.warn("World '$worldUuid' with registered MobRepellers not loaded!")
                     continue
                 }
                 map[Location<World>(worldOpt.get(), row[Repellers.x], row[Repellers.y], row[Repellers.z])] =

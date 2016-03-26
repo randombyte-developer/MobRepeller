@@ -4,7 +4,6 @@ import com.google.inject.Inject
 import de.randombyte.mobrepeller.commands.ListRepellers
 import de.randombyte.mobrepeller.commands.RegisterRepeller
 import de.randombyte.mobrepeller.database.DatabaseManager
-import me.flibio.updatifier.Updatifier
 import org.slf4j.Logger
 import org.spongepowered.api.Sponge
 import org.spongepowered.api.command.spec.CommandSpec
@@ -20,7 +19,6 @@ import org.spongepowered.api.text.Text
 import java.nio.file.Path
 
 @Plugin(id = PluginInfo.ID, name = PluginInfo.NAME, version = PluginInfo.VERSION, authors = arrayOf(PluginInfo.AUTHOR))
-@Updatifier(repoOwner = "randombyte-developer", repoName = PluginInfo.NAME, version = PluginInfo.VERSION)
 class MobRepeller {
 
     @Inject

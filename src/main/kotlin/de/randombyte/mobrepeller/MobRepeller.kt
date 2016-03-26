@@ -2,7 +2,6 @@ package de.randombyte.mobrepeller
 
 import com.google.inject.Inject
 import de.randombyte.mobrepeller.commands.ListRepellers
-import de.randombyte.mobrepeller.commands.RegisterRepeller
 import de.randombyte.mobrepeller.database.DatabaseManager
 import org.slf4j.Logger
 import org.spongepowered.api.Sponge
@@ -37,13 +36,6 @@ class MobRepeller {
         //webServer = Server.createWebServer("-web", "-webAllowOthers", "-webPort", "8082").start()
 
         State.logger = logger
-
-        Sponge.getCommandManager().register(this, CommandSpec.builder()
-            .executor(RegisterRepeller())
-            .description(Text.of("Registers a MobRepeller"))
-            .extendedDescription(Text.of("Tries to register a MobRepeller on block Player is standing on which has to be" +
-                    "the center of the cross."))
-            .build(), "registerRepeller")
 
         Sponge.getCommandManager().register(this, CommandSpec.builder()
                 .executor(ListRepellers())

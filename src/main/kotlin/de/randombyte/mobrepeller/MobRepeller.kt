@@ -5,7 +5,6 @@ import de.randombyte.mobrepeller.commands.ListRepellers
 import de.randombyte.mobrepeller.commands.RegisterRepeller
 import de.randombyte.mobrepeller.database.DatabaseManager
 import me.flibio.updatifier.Updatifier
-import org.h2.tools.Server
 import org.slf4j.Logger
 import org.spongepowered.api.Sponge
 import org.spongepowered.api.command.spec.CommandSpec
@@ -31,7 +30,7 @@ class MobRepeller {
     @ConfigDir(sharedRoot = false)
     lateinit var pluginConfigDir: Path
 
-    var wevServer: Server? = null
+    //var wevServer: Server? = null
 
     @Listener
     fun onInit(event: GameInitializationEvent) {

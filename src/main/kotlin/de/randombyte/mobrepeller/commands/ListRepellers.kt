@@ -12,11 +12,24 @@ import org.spongepowered.api.command.spec.CommandExecutor
 import org.spongepowered.api.entity.living.player.Player
 import org.spongepowered.api.service.pagination.PaginationService
 import org.spongepowered.api.text.Text
-import org.spongepowered.api.text.action.TextActions
-import org.spongepowered.api.text.format.TextColors.GREEN
-import org.spongepowered.api.text.format.TextColors.YELLOW
+import org.spongepowered.api.text.format.TextColors.*
 
 class ListRepellers : CommandExecutor {
+    companion object {
+        val inRaduis = Text.of(DARK_GREEN, "X")
+        val notInRaduis = Text.of(DARK_RED, "X")
+        val listHeader = Text.builder()
+                .append(Text.of(RESET, "=== "))
+                .append(Text.of(YELLOW, "Position "))
+                .append(Text.of(GREEN, "Radius "))
+                .append(inRaduis)
+                .append(Text.of(RESET, "/"))
+                .append(notInRaduis)
+                .append(Text.of(RESET, "(in radius)"))
+                .append(Text.of(RESET, " ==="))
+                .build()
+    }
+
     override fun execute(src: CommandSource?, ctx: CommandContext?): CommandResult? {
         val player = when (src) {
             null -> return CommandResult.empty()
@@ -28,17 +41,19 @@ class ListRepellers : CommandExecutor {
         if (repellersInWorld.size == 0) return src.warn("No MobRepeller in this world!")
 
         val repellerTexts = repellersInWorld.map { repeller ->
+            val pos = repeller.key.position
+            val isInRadius = pos.distance(player.location.position) <= repeller.value.radius
             Text.builder()
-                    .append(Text.of(YELLOW, "Position: ${repeller.key.position.toString()} "))
-                    .append(Text.of(GREEN, "Radius: ${repeller.value.radius}"))
-                    .onHover(TextActions.showText(getHoverText(repeller.key.position, player.location.position,
-                            repeller.value.radius)))
+                    .append(Text.of(YELLOW, "${pos.floorX}, ${pos.floorY}, ${pos.floorZ} "))
+                    .append(Text.of(GREEN, "${repeller.value.radius} "))
+                    .append(if (isInRadius) inRaduis else notInRaduis)
                     .build()
         }
 
+        player.sendMessage(Text.of(GREEN, "${repellersInWorld.size} MobRepeller(s) in this world"))
         val paginationServcie = Sponge.getServiceManager().provide(PaginationService::class.java).get()
         paginationServcie.builder()
-            .header(Text.of(GREEN, "== ${repellersInWorld.size} MobRepeller(s) in this world: =="))
+            .header(listHeader)
             .contents(repellerTexts)
             .sendTo(src)
 

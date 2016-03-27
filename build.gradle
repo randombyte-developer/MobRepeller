@@ -1,16 +1,7 @@
-buildscript {
-    repositories {
-        maven { url "https://jitpack.io" }
-    }
-    dependencies {
-        classpath "com.github.qixalite:SpongeStart:1.4"
-    }
-}
-
 plugins {
     id "com.zoltu.kotlin" version "1.0.1"
+    id "com.qixalite.spongestart" version "1.4.2"
 }
-apply plugin: "SpongeStart" //Will include it in plugins DSL when qixalite uploaded the plugin to the plugins.gradle.org repo
 
 group "de.randombyte"
 version "0.2.1"
@@ -22,19 +13,18 @@ repositories {
     maven { url "http://dl.bintray.com/kotlin/exposed" }
 }
 
-sponge{
+spongestart {
     eula true
 }
 
 configurations {
     shade
-    compile.extendsFrom shadow
+    compile.extendsFrom shade
 }
 
 dependencies {
     shade "org.jetbrains.kotlin:kotlin-runtime:1.0.1"
     shade "org.jetbrains.kotlin:kotlin-stdlib:1.0.1"
-    compile "org.jetbrains.kotlin:kotlin-stdlib:1.0.1"
     compile "org.spongepowered:spongeapi:4.0.3"
     compile "org.jetbrains.exposed:exposed:0.3.2"
 }

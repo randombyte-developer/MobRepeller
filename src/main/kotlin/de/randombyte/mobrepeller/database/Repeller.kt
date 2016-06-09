@@ -7,9 +7,6 @@ import org.spongepowered.api.world.Location
 import org.spongepowered.api.world.World
 import java.util.*
 
-/**
- * Internal representation in database
- */
 data class Repeller(val id: Int, val radius: Int) {
     companion object {
         fun fromQuery(query: Query): MutableMap<Location<World>, Repeller> {

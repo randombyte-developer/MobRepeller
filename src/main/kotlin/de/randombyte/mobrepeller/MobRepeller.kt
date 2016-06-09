@@ -18,23 +18,10 @@ import org.spongepowered.api.text.Text
 import java.nio.file.Path
 
 @Plugin(id = PluginInfo.ID, name = PluginInfo.NAME, version = PluginInfo.VERSION, authors = arrayOf(PluginInfo.AUTHOR))
-class MobRepeller {
-
-    @Inject
-    lateinit var logger: Logger
-
-    @Inject
-    @ConfigDir(sharedRoot = false)
-    lateinit var pluginConfigDir: Path
-
-    //var wevServer: Server? = null
+class MobRepeller @Inject constructor(val logger: Logger, @ConfigDir(sharedRoot = false) val pluginConfigDir: Path) {
 
     @Listener
     fun onInit(event: GameInitializationEvent) {
-
-        //DEBUGGING
-        //webServer = Server.createWebServer("-web", "-webAllowOthers", "-webPort", "8082").start()
-
         State.logger = logger
 
         Sponge.getCommandManager().register(this, CommandSpec.builder()

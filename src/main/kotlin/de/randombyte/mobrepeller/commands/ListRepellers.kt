@@ -16,16 +16,16 @@ import org.spongepowered.api.text.format.TextColors.*
 
 class ListRepellers : CommandExecutor {
     companion object {
-        val inRaduis = Text.of(DARK_GREEN, "X")
-        val notInRaduis = Text.of(DARK_RED, "X")
+        val inRadius = Text.of(DARK_GREEN, "inside radius")
+        val notInRadius = Text.of(DARK_RED, "outside radius")
+        val separator = Text.of(RESET, " ; ")
         val listHeader = Text.builder()
                 .append(Text.of(RESET, "=== "))
-                .append(Text.of(YELLOW, "Position "))
-                .append(Text.of(GREEN, "Radius "))
-                .append(inRaduis)
-                .append(Text.of(RESET, "/"))
-                .append(notInRaduis)
-                .append(Text.of(RESET, "(in radius)"))
+                .append(Text.of(YELLOW, "Position"))
+                .append(separator)
+                .append(Text.of(GREEN, "Radius"))
+                .append(separator)
+                .append(Text.of(RESET, "Your position"))
                 .append(Text.of(RESET, " ==="))
                 .build()
     }
@@ -45,8 +45,10 @@ class ListRepellers : CommandExecutor {
             val isInRadius = pos.distance(player.location.position) <= repeller.value.radius
             Text.builder()
                     .append(Text.of(YELLOW, "${pos.floorX}, ${pos.floorY}, ${pos.floorZ} "))
+                    .append(separator)
                     .append(Text.of(GREEN, "${repeller.value.radius} "))
-                    .append(if (isInRadius) inRaduis else notInRaduis)
+                    .append(separator)
+                    .append(if (isInRadius) inRadius else notInRadius)
                     .build()
         }
 

@@ -55,5 +55,5 @@ object State {
         }
     }
 
-    fun Location<World>.toInt() =   Location(extent, blockPosition)
+    fun Location<World>.toInt() = Location(extent, blockPosition)
 }

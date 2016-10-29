@@ -8,9 +8,9 @@ import org.spongepowered.api.world.World
 
 object DatabaseManager {
 
-    var databasePath = "./MobRepeller"
+    lateinit var databasePath: String
 
-    val sqlService: SqlService by SqlServiceDelegate() //lazyinit
+    val sqlService: SqlService by SqlServiceDelegate() // lazyinit
 
     fun getDataSource() = sqlService.getDataSource("jdbc:h2:$databasePath")
 

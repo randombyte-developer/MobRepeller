@@ -1,5 +1,6 @@
 package de.randombyte.mobrepeller.commands
 
+import org.spongepowered.api.command.CommandException
 import org.spongepowered.api.command.CommandResult
 import org.spongepowered.api.command.CommandSource
 import org.spongepowered.api.text.Text
@@ -7,8 +8,7 @@ import org.spongepowered.api.text.format.TextColors
 
 object PlayerCommunicator {
     fun CommandSource.error(message: String): CommandResult {
-        sendMessage(Text.of(TextColors.DARK_RED, message))
-        return CommandResult.empty()
+        throw CommandException(Text.of(TextColors.DARK_RED, message))
     }
 
     fun CommandSource.success(message: String): CommandResult {
@@ -18,6 +18,6 @@ object PlayerCommunicator {
 
     fun CommandSource.warn(message: String): CommandResult {
         sendMessage(Text.of(TextColors.YELLOW, message))
-        return CommandResult.empty()
+        return CommandResult.success()
     }
 }

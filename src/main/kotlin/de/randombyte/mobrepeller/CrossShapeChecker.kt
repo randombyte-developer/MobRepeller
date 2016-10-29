@@ -10,11 +10,11 @@ import org.spongepowered.api.world.extent.Extent
 object CrossShapeChecker {
 
     val directions = listOf(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST)
-    //BlockTypes mapped to the value they increase the radius by
-    val blockTypes = mapOf(IRON_BLOCK to 2, LAPIS_BLOCK to 2, GOLD_BLOCK to 4, DIAMOND_BLOCK to 6)
+    // BlockTypes mapped to the value they increase the radius by
+    val blockTypes = mapOf(IRON_BLOCK to 2, LAPIS_BLOCK to 2, GOLD_BLOCK to 4, DIAMOND_BLOCK to 6, EMERALD_BLOCK to 10)
 
     fun calculateRadius(extent: Extent, blocks: List<Vector3i>): Int {
-        //A cross has at least 5 blocks
+        // A cross has at least 5 blocks
         return if (blocks.size < 5) 0 else blocks.sumBy { blockTypes[extent.getBlock(it).type] ?: 0 }
     }
 
@@ -25,7 +25,7 @@ object CrossShapeChecker {
         val centerPos = if (blockTypes.containsKey(centerBlock.blockType)) centerBlock.blockPosition else return emptyList()
         return directions.map { direction ->
             val armBlocks = getCrossArmBlocks(centerBlock, direction)
-            if (armBlocks.size < 1) return emptyList() //Every arm has to have at least one block in arm
+            if (armBlocks.size < 1) return emptyList() // Every arm has to have at least one block in arm
             return@map armBlocks
         }.flatMap { it } + centerPos
     }

@@ -15,8 +15,7 @@ object State {
 
     var logger: Logger? = null
 
-    //<centerBlockLocation, repellerObject>
-    var repellers: Map<Location<World>, Repeller> = HashMap()
+    var repellers: Map<Location<World>, Repeller> = HashMap() // <centerBlockLocation, repellerObject>
 
     enum class RepellerRegistrationResult {
         CREATED, DUPLICATE, UPDATED, NO_REPELLER, REMOVED
@@ -56,5 +55,5 @@ object State {
         }
     }
 
-    fun Location<World>.toInt()= Location(extent, blockPosition)
+    fun Location<World>.toInt() =   Location(extent, blockPosition)
 }
